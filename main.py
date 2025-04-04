@@ -2,18 +2,16 @@
 # Email: andrew.effat@uhn.ca
 
 # Import required classes
-from FrameExtractor import FrameExtractor
-from FrameSelector import FrameSelector
-from TumorAnnotator import TumorAnnotator
-from Extrapolator import Extrapolator
-import os
-import json
-import csv
+from frame_extractor import FrameExtractor
+from frame_selector import FrameSelector
+from tumour_annotator import TumourAnnotator
+from volume_calculator import VolumeCalculator
+from tkinter import filedialog, messagebox, simpledialog
 from datetime import datetime
+import os
+import csv
 import tkinter as tk
-from tkinter import filedialog, messagebox
 import logging
-from tkinter import simpledialog
 
 # Configure logging
 logging.basicConfig(
@@ -21,6 +19,20 @@ logging.basicConfig(
     level=logging.ERROR,
     format="%(asctime)s %(levelname)s: %(message)s"
 )
+print("Importing cv2...")
+import cv2
+print("cv2 imported.")
+
+print("Importing tkinter...")
+import tkinter as tk
+print("tkinter imported.")
+
+print("Importing PIL...")
+from PIL import Image, ImageTk
+print("PIL imported.")
+
+print("Script setup complete.")
+
 if __name__ == "__main__":
 
     try:
@@ -78,11 +90,11 @@ if __name__ == "__main__":
         folder_path, slice_thickness_mm, same_thickness = get_user_inputs()
         if not folder_path or slice_thickness_mm is None:
             exit()
-
-        results_csv = os.path.join(folder_path, "tumor_volume_results.csv")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        results_csv = os.path.join(folder_path, "tumour_volume_results_{}.csv".format(timestamp))
         with open(results_csv, mode='w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Video Name', 'Tumor Volume (mm^3)','Max Width (mm)', 'Avg Width (mm)', 'Max Depth (mm)', 'Avg Depth (mm)', 'Length (mm)', 'Slice Thickness (mm)', 'Pixel-to-mm Ratio', 'Timestamp'])
+            writer.writerow(['Video Name', 'Tumour Volume (mm^3)','Max Width (mm)', 'Avg Width (mm)', 'Max Depth (mm)', 'Avg Depth (mm)', 'Length (mm)', 'Slice Thickness (mm)', 'Pixel-to-mm Ratio', 'Timestamp'])
 
         for video_name in os.listdir(folder_path):
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -122,28 +134,22 @@ if __name__ == "__main__":
                 os.makedirs(annotation_dir, exist_ok=True)  # Ensure directory exists before saving
                                     
                 for idx, frame_path in enumerate(sampled_frames):
-                    annotator = TumorAnnotator(frame_path, annotation_dir, idx, sampled_frames)
+                    annotator = TumourAnnotator(frame_path, annotation_dir, idx, sampled_frames)
                     if idx == len(sampled_frames) - 1:  # Last frame
                         pixel_to_mm_ratio = annotator.get_pixel_to_mm_ratio()
                         if pixel_to_mm_ratio is None:
                             raise ValueError("Pixel-to-mm ratio not calculated.")
-                        print(f"Final pixel-to-mm ratio: {pixel_to_mm_ratio:.2f}")
-
-
-
-
 
                 print("Annotation completed.")
 
-                extrapolator = Extrapolator(
+                calculator = VolumeCalculator(
                     annotated_frames=sorted([os.path.join(annotation_dir, f) for f in os.listdir(annotation_dir) if f.endswith(".json")]),
-                    output_dir=os.path.join(folder_path, f"{video_name}_extrapolated_{timestamp}"),
+                    output_dir=os.path.join(folder_path, f"{video_name}_calculated_{timestamp}"),
                     total_frames=total_frames,
                     slice_thickness_mm=slice_thickness_mm,
                     pixel_to_mm_ratio=pixel_to_mm_ratio,
-                    video_name=video_name
                 )
-                volume_mm3, max_width, avg_width, max_depth, avg_depth, length = extrapolator.run()
+                volume_mm3, max_width, avg_width, max_depth, avg_depth, length = calculator.run()
 
                 with open(results_csv, mode='a', newline='') as file:
                     writer = csv.writer(file)

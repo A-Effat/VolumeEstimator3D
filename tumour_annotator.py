@@ -8,19 +8,18 @@ from PIL import Image, ImageTk
 import json
 import os
 
-class TumorAnnotator:
+class TumourAnnotator:
     def __init__(self, frame_path, annotation_dir,current_frame_index,frame_paths):
         self.current_frame_index = current_frame_index
         self.frame_path = frame_path
         self.frame_paths = frame_paths
         self.annotation_dir = annotation_dir
-        self.measurements = []
         self.points = []
         self.measuring_5mm = False
         self.pixel_to_mm_ratio = None
 
         self.root = tk.Tk()
-        self.root.title("Tumor Annotator")
+        self.root.title("Tumour Annotator")
         self.image_panel = tk.Label(self.root)
         self.image_panel.pack()
 
@@ -68,9 +67,6 @@ class TumorAnnotator:
         self.image_panel.config(image=self.tk_image)
         self.image_panel.image = self.tk_image  # Keep a reference to avoid being garbage collected
 
-
-
-
     def save_annotation(self):
         """Save the annotation for the current frame."""
         annotation_name = os.path.basename(self.frame_path).replace('.png', '.json')
@@ -89,8 +85,6 @@ class TumorAnnotator:
             self.next_button.config(state=tk.DISABLED)  # Temporarily disable button
             self.measure_5mm_line()  # Transition to calibration mode
             self.next_button.config(state=tk.NORMAL)  # Reactivate with updated command
-
-
 
     def start_drawing(self, event):
         """Start drawing with corrected coordinates."""
@@ -130,8 +124,6 @@ class TumorAnnotator:
 
         return corrected_x, corrected_y
 
-
-
     def stop_drawing(self, event):
         pass
 
@@ -146,8 +138,6 @@ class TumorAnnotator:
         """Return the pixel-to-mm ratio after calibration."""
         return getattr(self, 'pixel_to_mm_ratio', None)
         
-
-
     def measure_5mm_line(self):
         """Enable the user to draw a 5mm calibration line with exactly two points."""
         self.measuring_5mm = True
@@ -177,15 +167,10 @@ class TumorAnnotator:
         # Bind new click event for calibration
         self.image_panel.bind("<Button-1>", on_click)
 
-
     def display_point_feedback(self, x, y):
         """Draw a small circle or marker to indicate the clicked point."""
         cv2.circle(self.img, (x, y), 2, (0, 0, 255), -1)  # red marker
         self.update_display_image()
-
-
-
-
 
     def draw_calibration_line(self):
         """Draw a line between the two calibration points."""
@@ -195,35 +180,19 @@ class TumorAnnotator:
             cv2.line(self.img, (x1, y1), (x2, y2), (0,0, 255), 2)  # Red line for calibration
             self.update_display_image()
 
-
-
- 
-
-
     def calculate_pixel_to_mm_ratio(self):
         """Calculate and display the pixel-to-mm ratio based on the calibration line."""
         x1, y1 = self.points[0]
         x2, y2 = self.points[1]
         pixel_distance = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
-        self.pixel_to_mm_ratio = pixel_distance / 5.0  # Assuming 5mm real-world distance
+        self.pixel_to_mm_ratio = round(pixel_distance / 5.0,3)  # Assuming 5mm real-world distance
         print(f"Pixel-to-mm ratio: {self.pixel_to_mm_ratio:.2f}")
-
-
 
     def exit_annotation(self):
         """Exit the annotation process after calibration is complete."""
         self.root.destroy()
         #self.root.quit()
         
-
-    def clear_previous_annotations(self):
-        """Clear the previous contours and reset the frame."""
-        self.img = cv2.imread(self.frame_path)  # Reload the original frame
-        if self.img is None:
-            messagebox.showerror("Error", f"Cannot reload image: {self.frame_path}")
-            return
-        self.update_display_image()
-        self.points = []  # Clear any existing annotation points
 
 
 

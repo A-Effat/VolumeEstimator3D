@@ -1,0 +1,10 @@
+__pycache__/
+*.csv
+*.log
+*.avi
+*.spec
+*.app/
+carla_*
+dist/
+build/
+*.txt
