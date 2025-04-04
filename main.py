@@ -19,19 +19,7 @@ logging.basicConfig(
     level=logging.ERROR,
     format="%(asctime)s %(levelname)s: %(message)s"
 )
-print("Importing cv2...")
-import cv2
-print("cv2 imported.")
 
-print("Importing tkinter...")
-import tkinter as tk
-print("tkinter imported.")
-
-print("Importing PIL...")
-from PIL import Image, ImageTk
-print("PIL imported.")
-
-print("Script setup complete.")
 
 if __name__ == "__main__":
 
