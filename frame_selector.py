@@ -7,6 +7,7 @@ from PIL import Image, ImageTk
 import os
 import cv2
 import numpy as np
+import logging
 
 
 class FrameSelector:
@@ -111,13 +112,13 @@ class FrameSelector:
         """Set the current frame as the start frame."""
         self.start_frame = self.current_index
         self.update_selection_label()
-        print(f"Start frame set to {self.start_frame + 1}")
+        logging.info(f"Start frame set to {self.start_frame + 1}")
 
     def set_end_frame(self):
         """Set the current frame as the end frame."""
         self.end_frame = self.current_index
         self.update_selection_label()
-        print(f"End frame set to {self.end_frame + 1}")
+        logging.info(f"End frame set to {self.end_frame + 1}")
 
     def update_selection_label(self):
         """Update the label showing the selected start and end frames."""
@@ -131,7 +132,7 @@ class FrameSelector:
             if self.start_frame < self.end_frame:
                 with open("frame_selection.txt", "w") as f:
                     f.write(f"{self.start_frame},{self.end_frame}")
-                print("Start and end frames saved.")
+                logging.info("Start and end frames saved.")
                 self.root.destroy()
             else:
                 messagebox.showerror("Error", "Start frame must be less than the end frame.")

@@ -7,6 +7,7 @@ import cv2
 from PIL import Image, ImageTk
 import json
 import os
+import logging
 
 class TumourAnnotator:
     def __init__(self, frame_path, annotation_dir,current_frame_index,frame_paths):
@@ -92,7 +93,7 @@ class TumourAnnotator:
         os.makedirs(self.annotation_dir, exist_ok=True)
         with open(annotation_path, 'w') as f:
             json.dump({"points": self.points}, f)
-        print(f"Annotation saved for {annotation_name}")
+        logging.info(f"Annotation saved for {annotation_name}")
 
     def next_frame(self):
         """Handle frame progression and ensure last frame calibration."""
@@ -204,7 +205,7 @@ class TumourAnnotator:
         x2, y2 = self.points[1]
         pixel_distance = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
         self.pixel_to_mm_ratio = round(pixel_distance / 5.0,3)  # Assuming 5mm real-world distance
-        print(f"Pixel-to-mm ratio: {self.pixel_to_mm_ratio:.2f}")
+        logging.info(f"Pixel-to-mm ratio: {self.pixel_to_mm_ratio:.2f}")
 
     def exit_annotation(self):
         """Exit the annotation process after calibration is complete."""

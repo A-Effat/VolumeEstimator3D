@@ -4,6 +4,7 @@
 import numpy as np
 import json
 import os
+import logging
 
 
 class VolumeCalculator:
@@ -78,8 +79,8 @@ class VolumeCalculator:
         length = (frame_indices[-1] - frame_indices[0]) * self.slice_thickness_mm
         # Estimate tumor volume
         volume, volume_mm3 = self.calculate_volume(areas, frame_indices)
-        print(f"Estimated tumor volume: {round(volume,3)} squared pixels * millimeters")
-        print(f"Estimated tumor volume: {round(volume_mm3,3)} cubic millimeters")
+        logging.info(f"Estimated tumor volume: {round(volume,3)} squared pixels * millimeters")
+        logging.info(f"Estimated tumor volume: {round(volume_mm3,3)} cubic millimeters")
         return (round(volume_mm3, 3),round(max_width, 3),round(avg_width, 3),round(max_depth, 3),round(avg_depth, 3),round(length, 3)
     )
 

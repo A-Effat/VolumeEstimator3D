@@ -16,15 +16,14 @@ import logging
 # Configure logging
 logging.basicConfig(
     filename="app_error.log",
-    level=logging.ERROR,
-    format="%(asctime)s %(levelname)s: %(message)s"
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
 )
-
 
 if __name__ == "__main__":
 
     try:
-        print("Application is starting...")
+        logging.info("Application is starting...")
 
         def get_user_inputs():
             """Launch a GUI to get the video folder path and slice thickness from the user."""
@@ -89,7 +88,7 @@ if __name__ == "__main__":
             if video_name.endswith(('.avi', '.mp4', '.mov')):
                 video_path = os.path.join(folder_path, video_name)
                 video_name = os.path.splitext(video_name)[0]
-                print(f"Processing {video_name}...")
+                logging.info(f"Processing {video_name}...")
 
                 # If "same thickness" is not checked, prompt user for slice thickness per video
                 if not same_thickness:
@@ -112,11 +111,11 @@ if __name__ == "__main__":
 
                 frame_extractor = FrameExtractor(video_path, output_dir)
                 total_frames = frame_extractor.extract_frames()
-                print(f"Total frames extracted: {total_frames}")
+                logging.info(f"Total frames extracted: {total_frames}")
 
                 frame_selector = FrameSelector(output_dir)
                 sampled_frames = frame_selector.get_sampled_frames()
-                print(f"Sampled frames for annotation: {sampled_frames}")
+                logging.info(f"Sampled frames for annotation: {sampled_frames}")
 
                 annotation_dir = os.path.join(folder_path, f"{video_name}_annotations_{timestamp}")
                 os.makedirs(annotation_dir, exist_ok=True)  # Ensure directory exists before saving
@@ -128,7 +127,7 @@ if __name__ == "__main__":
                         if pixel_to_mm_ratio is None:
                             raise ValueError("Pixel-to-mm ratio not calculated.")
 
-                print("Annotation completed.")
+                logging.info("Annotation completed.")
 
                 calculator = VolumeCalculator(
                     annotated_frames=sorted([os.path.join(annotation_dir, f) for f in os.listdir(annotation_dir) if f.endswith(".json")]),
@@ -143,7 +142,7 @@ if __name__ == "__main__":
                     writer = csv.writer(file)
                     writer.writerow([video_name, volume_mm3, max_width, avg_width, max_depth, avg_depth, length, slice_thickness_mm,pixel_to_mm_ratio,timestamp])
         
-        print(f"Results saved to {results_csv}")
+        logging.info(f"Results saved to {results_csv}")
 
     except Exception as e:
         logging.error("An error occurred", exc_info=True)
