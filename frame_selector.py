@@ -70,7 +70,26 @@ class FrameSelector:
             return
 
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        img_pil = Image.fromarray(frame_rgb).resize((1000, 600), Image.LANCZOS)
+        img_pil = Image.fromarray(frame_rgb)
+
+        # Define max display size
+        max_width = 1000
+        max_height = 500  # so buttons are visible
+
+        # Original size
+        original_width, original_height = img_pil.size
+        aspect_ratio = original_height / original_width
+
+        # Resize based on width, but don't exceed max height
+        target_width = max_width
+        target_height = int(target_width * aspect_ratio)
+
+        if target_height > max_height:
+            target_height = max_height
+            target_width = int(target_height / aspect_ratio)
+
+        img_pil = img_pil.resize((target_width, target_height), Image.LANCZOS)
+
 
         img_tk = ImageTk.PhotoImage(img_pil)
 

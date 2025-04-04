@@ -60,7 +60,25 @@ class TumourAnnotator:
     def update_display_image(self):
         """Update the displayed image after any change."""
         img_rgb = cv2.cvtColor(self.img, cv2.COLOR_BGR2RGB)
-        img_pil = Image.fromarray(img_rgb).resize((1000, 600), Image.LANCZOS)
+        img_pil = Image.fromarray(img_rgb)
+
+        # Limit displayed image size to avoid overlapping UI
+        max_width = 1000
+        max_height = 500  # or less, depending on your layout
+
+        # Preserve aspect ratio
+        original_width, original_height = img_pil.size
+        aspect_ratio = original_height / original_width
+
+        target_width = max_width
+        target_height = int(target_width * aspect_ratio)
+
+        if target_height > max_height:
+            target_height = max_height
+            target_width = int(target_height / aspect_ratio)
+
+        img_pil = img_pil.resize((target_width, target_height), Image.LANCZOS)
+
         
         # Persist the PhotoImage object to avoid garbage collection
         self.tk_image = ImageTk.PhotoImage(img_pil)
