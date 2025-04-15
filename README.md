@@ -10,7 +10,8 @@ Although originally designed for ultrasound data, this tool is suitable for **an
 - Extract frames from video files or work with image sequences.
 - Annotate selected slices using an interactive graphical interface.
 - Calibrate with pixel-to-mm scaling.
-- Extrapolate annotations to estimate 3D volumes.
+- Estimate 3D volumes using **linear interpolation** between annotated slices.  
+  The method applies the **trapezoidal rule**: averaging the areas of adjacent contours and multiplying by slice spacing.
 - Export volume metrics and contours for downstream analysis or 3D visualization.
 
 ## Sample Data
