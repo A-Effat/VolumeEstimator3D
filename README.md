@@ -13,7 +13,16 @@ Although originally designed for ultrasound data, this tool is suitable for **an
 - Estimate 3D volumes using **linear interpolation** between annotated slices.  
   The method applies the **trapezoidal rule**: averaging the areas of adjacent contours and multiplying by slice spacing.
 - Export volume metrics and contours for downstream analysis or 3D visualization.
-
+## Validation Data
+When conducting validation:
+- Sample Thickness: 1mm
+- Diameter or Edge of Square: 5mm for reference
+- Start and end frame should be the first and last frame (100 frames)
+  
+Expected Volumes:
+- Circle: Radius = 2.5mm; Diameter = 5mm; Expected Volume = 1965.625 mm^3
+- Square: Length = 5mm; Expected Volume = 2500 mm^3
+- Variable Circle: Radius = 2.5mm; Diameter = 5mm; Expected Volume = 1965.625 mm^3
 ## Sample Data
 
 This repository includes a sample video:  
