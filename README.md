@@ -22,7 +22,7 @@ When conducting validation:
 Expected Volumes:
 - Circle: Radius = 2.5mm; Diameter = 5mm; Expected Volume = 1965.625 mm^3
 - Square: Length = 5mm; Expected Volume = 2500 mm^3
-- Variable Circle: Average Radius = 2.5mm; Average Diameter = 5mm; Expected Volume = 1965.625 mm^3
+- Variable Circle: Average Radius = 2.5mm; Average Diameter = 5mm; Expected Volume = 2127.25 mm^3
 ## Sample Data
 
 This repository includes a sample video:  
