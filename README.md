@@ -15,14 +15,15 @@ Although originally designed for ultrasound data, this tool is suitable for **an
 - Export volume metrics and contours for downstream analysis or 3D visualization.
 ## Validation Data
 When conducting validation:
-- Sample Thickness: 1mm
-- Diameter or Edge of Square: 5mm for reference
-- Start and end frame should be the first and last frame (100 frames)
+- Sample Thickness: 1 mm
+- Diameter or Edge of Square: 5 mm for reference
+- Start and end frame should be the first and last frame (1-100); 99 frames in total
   
 Expected Volumes:
-- Circle: Radius = 2.5mm; Diameter = 5mm; Expected Volume = 1965.625 mm^3
-- Square: Length = 5mm; Expected Volume = 2500 mm^3
-- Variable Circle: Average Radius = 2.5mm; Average Diameter = 5mm; Expected Volume = 2127.25 mm^3
+- Circle: Radius = 2.5 mm; Diameter = 5 mm; Actual/Expected Volume = 1943.86 mm^3
+- Square: Length = 5 mm; Actual/Expected Volume = 2475 mm^3
+- Variable Circle: Average Radius = 2.5 mm; Average Diameter = 5 mm; Actual Volume = 2105.98 mm^3, Expected Volume = 1915.15
+    Difference due to application of trapezoidal rule
 ## Sample Data
 
 This repository includes a sample video:  
