@@ -22,7 +22,7 @@ When conducting validation:
 Expected Volumes:
 - Circle: Radius = 2.5 mm; Diameter = 5 mm; Actual/Expected Volume = 1943.86 mm^3
 - Square: Length = 5 mm; Actual/Expected Volume = 2475 mm^3
-- Variable Circle: Average Radius = 2.5 mm; Average Diameter = 5 mm; Actual Volume = 2105.98 mm^3, Expected Volume = 1915.15
+- Variable Circle: Average Radius = 2.5 mm; Average Diameter = 5 mm; Actual Volume = 2105.98 mm^3, Expected Volume = 1915.15 mm^3
     Difference due to application of trapezoidal rule
 ## Sample Data
 
