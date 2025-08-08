@@ -14,11 +14,40 @@ import tkinter as tk
 import logging
 
 # Configure logging
-logging.basicConfig(
-    filename="app_error.log",
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
+
+# ---- Safe logging setup (macOS-friendly) ----
+import sys, pathlib, tempfile
+def _safe_log_path():
+    try:
+        base = pathlib.Path.home() / "Library" / "Logs" / "VolumeEstimator3D"
+        base.mkdir(parents=True, exist_ok=True)
+        return str(base / "app_error.log")
+    except Exception:
+        # Fallback to temp if ~/Library/Logs is unavailable
+        return str(pathlib.Path(tempfile.gettempdir()) / "VolumeEstimator3D_app_error.log")
+try:
+    logging.basicConfig(
+        filename=_safe_log_path(),
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s"
+    )
+except Exception:
+    # Final fallback to stderr so the app still starts
+    logging.basicConfig(
+        stream=sys.stderr,
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s"
+    )
+# Provide a visible hook for uncaught exceptions in windowed mode
+def _excepthook(exc_type, exc, tb):
+    import traceback
+    logging.error("Uncaught exception", exc_info=(exc_type, exc, tb))
+    try:
+        from tkinter import messagebox
+        messagebox.showerror("Critical Error", "An unexpected error occurred. Check the log for details.")
+    except Exception:
+        pass
+sys.excepthook = _excepthook
 
 if __name__ == "__main__":
 
