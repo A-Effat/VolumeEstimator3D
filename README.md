@@ -13,6 +13,7 @@ Examples include: ultrasound frames, CT slices, MRI sections, microscopy Z-stack
 - Estimate 3D volumes using **linear interpolation** between annotated slices.  
   The method applies the **trapezoidal rule**: averaging the areas of adjacent contours and multiplying by slice spacing.
 - Export volume metrics and contours for downstream analysis or 3D visualization.
+
 ## Validation Data
 When conducting validation:
 - Sample Thickness: 1 mm
